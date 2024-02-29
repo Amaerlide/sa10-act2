@@ -1,30 +1,34 @@
 class GildedRose
 
-  def tick
+  attr_reader :name, :item
+
+  def initialize(name, quality, days_remaining)
+    @item = klass_for(name).new(quality, days_remaining)
+  end
+
+  def klass_for(name)
     case name
     when 'Normal Item'
-      @item = Normal.new(quality, days_remaining)
-      item.tick
+      Normal
     when 'Aged Brie'
-      @item = Brie.new(quality, days_remaining)
-      item.tick
+      Brie
     when 'Sulfuras, Hand of Ragnaros'
-      @item = Sulfuras.new(quality, days_remaining)
-      item.tick
+      Sulfuras
     when 'Backstage passes to a TAFKAL80ETC concert'
-      @item = Backstage.new(quality, days_remaining)
-      item.tick
+      Backstage
     end
   end
 
+  def tick
+    item.tick
+
   def quality
-    return item.quality if item
-    @quality
+    item.quality
   end
 
   def days_remaining
-    return item.days_remaining if item
-    @days_remaining
+    item.days_remaining
+  end
 
   class Normal
     attr_reader :quality, :days_remaining
@@ -85,53 +89,5 @@ class GildedRose
       @quality += 1 if @days_remaining < 10
       @quality += 1 if @days_remaining < 5
     end
-  end
-end
-
-
-
-
-
-
-  #def tick
-    #case name
-    #when 'Normal Item'
-    #  return normal_tick
-    #when 'Aged Brie'
-    #  return brie_tick
-    #when 'Sulfuras, Hand of Ragnaros'
-    #  return sulfuras_tick
-    #when 'Backstage passes to a TAFKAL80ETC concert'
-    #  return backstage_tick
-    #end
-  #end
-
-  def tick
-    @days_remaining -= 1
-    return if @quality == 0
-
-    @quality -= 1
-    @quality -= 1 if @days_remaining <= 0
-  end
-
-  def brie_tick
-    @days_remaining -= 1
-    return if @quality >= 50
-
-    @quality += 1
-    @quality += 1 if @days_remaining <= 0 && @quality < 50
-  end
-
-  def sulfuras_tick
-  end
-
-  def backstage_tick
-    @days_remaining -= 1
-    return if @quality >= 50
-    return @quality = 0 if @days_remaining < 0
-
-    @quality += 1
-    @quality += 1 if @days_remaining < 10
-    @quality += 1 if @days_remaining < 5
   end
 end
